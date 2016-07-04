@@ -65,7 +65,7 @@ class ZlibConan(ConanFile):
             else:
                 cmd = "cd _build && cmake --build . %s" % (cmake.build_config)
             self.output.warn(cmd)
-            self.run()
+            self.run(cmd)
         else:
             cmake = CMake(self.settings)
             self.run("mkdir _build")
