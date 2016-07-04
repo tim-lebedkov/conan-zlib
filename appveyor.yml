@@ -9,6 +9,7 @@ environment:
     CONAN_USERNAME: "lasote"
     CONAN_CHANNEL: "ci"
     CONAN_TOTAL_PAGES: 4
+    CONAN_GCC_VERSIONS: "4.8"
     
     matrix:
         - CONAN_CURRENT_PAGE: 1

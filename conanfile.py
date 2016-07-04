@@ -49,13 +49,26 @@ class ZlibConan(ConanFile):
             self.run("cd %s && %s ./configure" % (self.ZIP_FOLDER_NAME, env_line))
             #self.run("cd %s && %s make check" % (self.ZIP_FOLDER_NAME, env.command_line))
             self.run("cd %s && %s make" % (self.ZIP_FOLDER_NAME, env_line))
-         
+        elif self.settings.os == "Windows":
+            cmake = CMake(self.settings)
+            self.run("if not exist _build mkdir _build")
+            
+            if self.settings.compiler == "gcc":
+                cmd = 'set cc=c:\\mingw\\bin\gcc&&cd _build && cmake .. %s' % (cmake.command_line)
+            else:
+                cmd = 'cd _build && cmake .. %s' % (cmake.command_line)
+            self.output.warn(cmd)
+            self.run(cmd)
+            
+            if self.settings.compiler == "gcc":
+                cmd = "set cc=c:\\mingw\\bin\gcc&&cd _build && cmake --build . %s" % (cmake.build_config)
+            else:
+                cmd = "cd _build && cmake --build . %s" % (cmake.build_config)
+            self.output.warn(cmd)
+            self.run()
         else:
             cmake = CMake(self.settings)
-            if self.settings.os == "Windows":
-                self.run("IF not exist _build mkdir _build")
-            else:
-                self.run("mkdir _build")
+            self.run("mkdir _build")
             cd_build = "cd _build"
             self.output.warn('%s && cmake .. %s' % (cd_build, cmake.command_line))
             self.run('%s && cmake .. %s' % (cd_build, cmake.command_line))
